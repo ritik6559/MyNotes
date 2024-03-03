@@ -7,19 +7,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.mynotes.data.NotesDataSource
-import com.example.mynotes.model.Note
 import com.example.mynotes.screens.NoteScreen
 import com.example.mynotes.screens.NoteViewModel
 import com.example.mynotes.ui.theme.MyNotesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    //val noteViewModel = viewModel<NoteViewModel> this also works
                     val noteViewModel:NoteViewModel by viewModels()
                     NotesApp(noteViewModel)
 
@@ -40,8 +39,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NotesApp(noteViewModel: NoteViewModel = viewModel()){
-    val noteList = noteViewModel.getAllNote()
+fun NotesApp(noteViewModel: NoteViewModel){
+    val noteList = noteViewModel.noteList.collectAsState().value
     NoteScreen(notes = noteList,
         onRemoveNote = {
             noteViewModel.removeNote(it)

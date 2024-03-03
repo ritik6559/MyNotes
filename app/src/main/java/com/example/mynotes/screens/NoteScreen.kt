@@ -3,7 +3,6 @@ package com.example.mynotes.screens
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mynotes.R
 import com.example.mynotes.components.NoteButton
 import com.example.mynotes.components.NoteInputText
+import com.example.mynotes.converter.formatDate
 import com.example.mynotes.data.NotesDataSource
 import com.example.mynotes.model.Note
 import java.time.format.DateTimeFormatter
@@ -55,7 +55,7 @@ fun NoteScreen(
         mutableStateOf("")
     }
 
-    var context = LocalContext.current
+    val context = LocalContext.current
     Column(modifier = Modifier.padding(6.dp)) {
         TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) },
             actions = {
@@ -130,10 +130,10 @@ fun NoteRow(modifier: Modifier = Modifier,
             .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.Start) {
             Text(text = note.title,
-                style = MaterialTheme.typography.titleMedium)
+                style = MaterialTheme.typography.titleLarge)
             Text(text = note.description,
-                style = MaterialTheme.typography.bodyMedium)
-            Text(text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")),
+                style = MaterialTheme.typography.bodyLarge)
+           Text(text = formatDate(note.entryDate.time),
                 style = MaterialTheme.typography.bodySmall)
         }
     }
